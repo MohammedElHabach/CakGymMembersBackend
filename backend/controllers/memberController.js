@@ -9,7 +9,7 @@ const getMembers = async (req, res) => {
 };
 
 // @desc    Create member
-// @route   GET /api/members
+// @route   POST /api/members
 // @access  Private
 const createMember = asyncHandler(async (req, res) => {
   if (!req.body.name) {
@@ -19,7 +19,7 @@ const createMember = asyncHandler(async (req, res) => {
 
   if (!req.body.phone) {
     res.status(400);
-    throw new Error("Please add a repo Link");
+    throw new Error("Please add a phone");
   }
 
   if (!req.body.startDate) {
@@ -37,6 +37,11 @@ const createMember = asyncHandler(async (req, res) => {
     throw new Error("Please add an amount paid");
   }
 
+  if (!req.body.trainer) {
+    res.status(400);
+    throw new Error("Please add a trainer");
+  }
+
   const member = await Member.create({
     name: req.body.name,
     phone: req.body.phone,
@@ -45,7 +50,8 @@ const createMember = asyncHandler(async (req, res) => {
     amountPaid: req.body.amountPaid,
     ptPackage: req.body.ptPackage,
     sessions: req.body.sessions,
-    status:req.body.status
+    status: req.body.status,
+    trainer: req.body.trainer,
   });
 
   res.status(200).json(member);
@@ -82,9 +88,74 @@ const deleteMember = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id, msg: "Deleted Successfully" });
 });
 
+// @desc    Retrieve expiration date by phone number
+// @route   POST /api/members
+// @access  Private
+const getExpirationDateByPhone = asyncHandler(async (req, res) => {
+  if (!req.body.phone) {
+    res.status(400).json({ msg: "Please enter a phone number" });
+  }
+
+  const phoneNumber = req.body.phone;
+
+  try {
+    const member = await Member.findOne({ phone: phoneNumber });
+
+    if (!member) {
+      return res.status(404).json({ msg: "Member not found" });
+    }
+
+    const { expirationDate } = member;
+    return res.json({ expirationDate });
+  } catch (err) {
+    return res.status(500).json({ msg: "Internal Server Error" });
+  }
+});
+
+// @desc    take attendance
+// @route   POST /api/members/attendance
+// @access  Private
+/*const takeAttendance = async (req, res) => {
+  const { date, attendanceData } = req.body;
+
+  try {
+    const attendanceDate = new Date(date);
+
+    for (const data of attendanceData) {
+      const memberId = data._id;
+      const { status } = data;
+
+      const member = await Member.findById(memberId);
+      if (!member) {
+        return res
+          .status(404)
+          .json({ message: `Member with ID ${memberId} not found` });
+      }
+
+      const existingAttendanceIndex = member.attendance.findIndex(
+        (attendance) => attendance.date.toDateString() === attendanceDate.toDateString()
+      );
+      if (existingAttendanceIndex !== -1) {
+        member.attendance[existingAttendanceIndex].status = status;
+      } else {
+        // If attendance for the given date doesn't exist, create a new entry
+        member.attendance.push({ date: attendanceDate, status });
+      }
+      await member.save();
+    }
+    return res.status(200).json({ message: "Attendance marked successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Failed to mark attendance", error });
+  }
+};
+*/
 module.exports = {
   getMembers,
   createMember,
   updateMember,
   deleteMember,
+  getExpirationDateByPhone,
+  
 };

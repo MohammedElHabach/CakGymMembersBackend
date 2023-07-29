@@ -11,28 +11,41 @@ const memberSchema = mongoose.Schema(
       required: [true, "Please add a phone number"],
       unique: true,
     },
-    startDate:{
-        type: Date,
-        required: [true, "Please add a start date"],
+    startDate: {
+      type: Date,
+      required: [true, "Please add a start date"],
     },
-    expirationDate:{
-        type: Date,
-        required: [true, "Please add a expiration date"],
+    expirationDate: {
+      type: Date,
+      required: [true, "Please add a expiration date"],
     },
-    amountPaid:{
-        type: String,
-        required: [true, "Please add an amount"],
+    amountPaid: {
+      type: String,
+      required: [true, "Please add an amount"],
     },
     ptPackage: {
       type: Boolean,
+      required: [true, "Please specify the value of pt package"],
     },
     sessions: {
       type: Number,
     },
-    status: {
-        type: Boolean,
-      }
-
+    trainer:{
+      type: String,
+      required: [true, "Please add a trainer"],
+    },
+    // attendance: [
+    //   {
+    //     date: {
+    //       type: Date,
+    //       required: true,
+    //     },
+    //     status: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //   },
+    // ],
   },
   { timestamps: true }
 );
