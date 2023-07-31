@@ -106,56 +106,16 @@ const getExpirationDateByPhone = asyncHandler(async (req, res) => {
     }
 
     const { expirationDate } = member;
-    return res.json({ expirationDate });
+    return res.status(200).json({ expirationDate });
   } catch (err) {
     return res.status(500).json({ msg: "Internal Server Error" });
   }
 });
 
-// @desc    take attendance
-// @route   POST /api/members/attendance
-// @access  Private
-/*const takeAttendance = async (req, res) => {
-  const { date, attendanceData } = req.body;
-
-  try {
-    const attendanceDate = new Date(date);
-
-    for (const data of attendanceData) {
-      const memberId = data._id;
-      const { status } = data;
-
-      const member = await Member.findById(memberId);
-      if (!member) {
-        return res
-          .status(404)
-          .json({ message: `Member with ID ${memberId} not found` });
-      }
-
-      const existingAttendanceIndex = member.attendance.findIndex(
-        (attendance) => attendance.date.toDateString() === attendanceDate.toDateString()
-      );
-      if (existingAttendanceIndex !== -1) {
-        member.attendance[existingAttendanceIndex].status = status;
-      } else {
-        // If attendance for the given date doesn't exist, create a new entry
-        member.attendance.push({ date: attendanceDate, status });
-      }
-      await member.save();
-    }
-    return res.status(200).json({ message: "Attendance marked successfully" });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Failed to mark attendance", error });
-  }
-};
-*/
 module.exports = {
   getMembers,
   createMember,
   updateMember,
   deleteMember,
   getExpirationDateByPhone,
-  
 };
