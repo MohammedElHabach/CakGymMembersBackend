@@ -105,8 +105,8 @@ const getExpirationDateByPhone = asyncHandler(async (req, res) => {
       return res.status(404).json({ msg: "Member not found" });
     }
 
-    const { expirationDate } = member;
-    return res.status(200).json({ expirationDate });
+    const { expirationDate,ptPackage,trainer } = member;
+    return res.status(200).json({ expirationDate,ptPackage,trainer });
   } catch (err) {
     return res.status(500).json({ msg: "Internal Server Error" });
   }

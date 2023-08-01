@@ -34,18 +34,6 @@ const memberSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add a trainer"],
     },
-    // attendance: [
-    //   {
-    //     date: {
-    //       type: Date,
-    //       required: true,
-    //     },
-    //     status: {
-    //       type: String,
-    //       required: true,
-    //     },
-    //   },
-    // ],
   },
   { timestamps: true }
 );
